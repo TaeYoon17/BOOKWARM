@@ -31,15 +31,17 @@ class HomeCollectionVC: UICollectionViewController{
     }
     private func setCollectionLayouts(){
         let layout = UICollectionViewFlowLayout()
-        let spacing = 20
-        let groupItemsCount = 2
-        let cellWidth: Int = (Int(UIScreen.main.bounds.width) - spacing * (groupItemsCount + 1)) / groupItemsCount
+        let spacing:CGFloat = 20; let groupItemsCount = 2;
+        let cellWidth: Int = (Int(UIScreen.main.bounds.width) -
+                              Int(spacing) * (groupItemsCount + 1)) / groupItemsCount
+        guard cellWidth > 0  else { fatalError("이건 아니지") }
         layout.itemSize = .init(width: cellWidth,height: cellWidth)
-        layout.sectionInset = .init(top: 20, left: 20, bottom: 20, right: 20)
+        layout.sectionInset = .init(top: spacing, left: spacing,
+                                    bottom: spacing, right: spacing)
         // 그룹간의 간격
-        layout.minimumLineSpacing = 20
+        layout.minimumLineSpacing = spacing
         // 아이템간의 간격
-        layout.minimumInteritemSpacing = 20
+        layout.minimumInteritemSpacing = spacing
         collectionView.collectionViewLayout = layout
     }
 }
