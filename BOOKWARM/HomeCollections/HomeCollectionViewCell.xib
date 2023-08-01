@@ -3,6 +3,7 @@
     <device id="retina6_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
+        <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -20,13 +21,20 @@
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xmh-3R-nfL">
                         <rect key="frame" x="0.0" y="47" width="413" height="240"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" verticalCompressionResistancePriority="751" text="안녕하세요안녕하세요안녕하세요" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="12" translatesAutoresizingMaskIntoConstraints="NO" id="kC5-H6-Fi0">
-                                <rect key="frame" x="16" y="15.999999999999998" width="381" height="20.333333333333329"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" text="안녕하세요안녕하세요안녕하세요" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="12" translatesAutoresizingMaskIntoConstraints="NO" id="kC5-H6-Fi0">
+                                <rect key="frame" x="16" y="15.999999999999998" width="220.66666666666666" height="20.333333333333329"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IbZ-zy-mId">
+                                <rect key="frame" x="364.33333333333331" y="8.6666666666666643" width="44.666666666666686" height="35"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain">
+                                    <imageReference key="image" image="heart" catalog="system" symbolScale="medium"/>
+                                </buttonConfiguration>
+                            </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gTT-Wg-8x3">
                                 <rect key="frame" x="16.000000000000004" y="203.66666666666666" width="41.333333333333343" height="20.333333333333343"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -42,14 +50,16 @@
                         </subviews>
                         <color key="backgroundColor" systemColor="systemYellowColor"/>
                         <constraints>
+                            <constraint firstItem="IbZ-zy-mId" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="kC5-H6-Fi0" secondAttribute="trailing" id="0km-R4-3GG"/>
                             <constraint firstItem="gTT-Wg-8x3" firstAttribute="leading" secondItem="xmh-3R-nfL" secondAttribute="leading" constant="16" id="2gt-hs-1xk"/>
                             <constraint firstAttribute="trailing" secondItem="UmF-AA-ZO2" secondAttribute="trailing" constant="16" id="7UU-WN-Q1z"/>
                             <constraint firstItem="kC5-H6-Fi0" firstAttribute="leading" secondItem="xmh-3R-nfL" secondAttribute="leading" constant="16" id="8GL-UL-reY"/>
                             <constraint firstItem="UmF-AA-ZO2" firstAttribute="top" secondItem="kC5-H6-Fi0" secondAttribute="bottom" constant="4" id="LoR-G2-Umi"/>
                             <constraint firstAttribute="bottom" secondItem="UmF-AA-ZO2" secondAttribute="bottom" constant="16" id="bv6-6Q-Oih"/>
+                            <constraint firstItem="IbZ-zy-mId" firstAttribute="centerY" secondItem="kC5-H6-Fi0" secondAttribute="centerY" id="iSW-Am-fhw"/>
+                            <constraint firstAttribute="trailing" secondItem="IbZ-zy-mId" secondAttribute="trailing" constant="4" id="jnf-St-xvp"/>
                             <constraint firstItem="kC5-H6-Fi0" firstAttribute="top" secondItem="xmh-3R-nfL" secondAttribute="top" constant="16" id="op7-bR-WNH"/>
                             <constraint firstItem="gTT-Wg-8x3" firstAttribute="trailing" relation="lessThanOrEqual" secondItem="UmF-AA-ZO2" secondAttribute="leading" id="pmE-uQ-Y8A"/>
-                            <constraint firstAttribute="trailing" secondItem="kC5-H6-Fi0" secondAttribute="trailing" constant="16" id="q8F-4Q-QWB"/>
                             <constraint firstAttribute="bottom" secondItem="gTT-Wg-8x3" secondAttribute="bottom" constant="16" id="sxD-el-dRg"/>
                         </constraints>
                     </view>
@@ -64,6 +74,7 @@
             </constraints>
             <size key="customSize" width="413" height="321"/>
             <connections>
+                <outlet property="likeBtn" destination="IbZ-zy-mId" id="DFK-xM-ohV"/>
                 <outlet property="posterImgView" destination="UmF-AA-ZO2" id="pnm-Wk-XbZ"/>
                 <outlet property="rootView" destination="xmh-3R-nfL" id="Qaq-H0-daB"/>
                 <outlet property="scoreLabel" destination="gTT-Wg-8x3" id="hgN-N2-fZP"/>
@@ -73,6 +84,7 @@
         </collectionViewCell>
     </objects>
     <resources>
+        <image name="heart" catalog="system" width="128" height="107"/>
         <systemColor name="systemYellowColor">
             <color red="1" green="0.80000000000000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>

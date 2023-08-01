@@ -9,19 +9,35 @@ import UIKit
 
 class HomeCollectionVC: UICollectionViewController{
     static let identifier = "HomeCollectionVC"
-    let infos = MovieInfo()
+    var infos = MovieInfo(){
+        didSet{ self.collectionView.reloadData() }
+    }
+    lazy var datasBgColor: [UIColor] = {
+        (0..<infos.movie.count).map{_ in .random}
+    }()
     let cellName = HomeCollectionViewCell.identifier
+    var selectedRow: Int?
     override func viewDidLoad() {
         super.viewDidLoad()
         print(#function)
         self.collectionView.register(.init(nibName: cellName, bundle: nil), forCellWithReuseIdentifier: cellName)
-        self.navigationItem.title = "고래밥님의 책상"
+//        self.navigationItem.title = "고래밥님의 책상"
         setCollectionLayouts()
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationItem.title = "고래밥님의 책상"
+        self.navigationController?.navigationBar.prefersLargeTitles = true
+        self.navigationController?.navigationBar.scrollEdgeAppearance?.backgroundColor = .white
+    }
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.navigationItem.title = ""
+        self.navigationController?.navigationBar.prefersLargeTitles = false
     }
     @IBAction func searchItemTapped(_ sender: UIBarButtonItem) {
         print(#function)
-        let sb = UIStoryboard(name: "Main", bundle: nil)
-        guard let vc = sb.instantiateViewController(withIdentifier: SearchVC.identifier) as? SearchVC else {
+        guard let vc = storyboard?.instantiateViewController(withIdentifier: SearchVC.identifier) as? SearchVC else {
             print("이건 안된다..!")
             return
         }
@@ -52,22 +68,28 @@ extension HomeCollectionVC{
             print("무엇인가 잘못됨!!")
             return .init()
         }
-        guard let info = infos.movie[safe: indexPath.row] else {
+        guard let info:Movie = infos.movie[safe: indexPath.row],let color = self.datasBgColor[safe: indexPath.row] else {
             print("진짜 대형 사고")
             return .init()
         }
-        cell.setCell(title: info.title, score: info.rate)
+        cell.setCell(title: info.title, score: info.rate,like:info.like
+                     ,bgColor: color,.init(handler: { _ in
+            cell.like.toggle()
+        }))
         return cell
     }
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         infos.movie.count
     }
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let sb = UIStoryboard(name: "Main", bundle: nil)
-        guard let vc = sb.instantiateViewController(withIdentifier: DetailVC.identifier) as? DetailVC, let info = infos.movie[safe: indexPath.row] else {
+        guard let vc = storyboard?.instantiateViewController(withIdentifier: DetailVC.identifier) as? DetailVC, let info:Movie = infos.movie[safe: indexPath.row] else {
             return
         }
-        vc.movieTitle = info.title
+        self.selectedRow = indexPath.row
+        guard let selectedRow, let color = datasBgColor[safe: selectedRow] else {return}
+//        vc.movieTitle = info.title
+        vc.movie = info
+        vc.headerBg = color
         self.navigationController?.pushViewController(vc, animated: true)
     }
 }
