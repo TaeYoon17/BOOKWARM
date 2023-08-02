@@ -6,6 +6,10 @@
 //
 
 import Foundation
+protocol MovieObserver{
+    var movieSubscriber:((Movie)->())?{ get set }
+    var movie:Movie? {get set}
+}
 struct MovieModel{
     let title:String
     let releaseDate: String

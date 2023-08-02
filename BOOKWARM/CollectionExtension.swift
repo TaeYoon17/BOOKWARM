@@ -8,6 +8,8 @@
 import Foundation
 extension Collection{
     subscript(safe idx:Index) -> Element?{
-        self.indices.contains(idx) ? self[idx] : nil
+        get{
+            self.indices.contains(idx) ? self[idx] : nil
+        }
     }
 }
