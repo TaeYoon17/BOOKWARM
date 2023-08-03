@@ -145,7 +145,7 @@ extension LookAroundVC: UICollectionViewDelegate,UICollectionViewDataSource{
     }
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let idx = recentMovieIdxList.list[indexPath.row]
-        print(idx)
+        print(idx) // 이스터에그
         presentNextView(index:idx)
         recentMovieIdxList.append(idx: idx)
     }
