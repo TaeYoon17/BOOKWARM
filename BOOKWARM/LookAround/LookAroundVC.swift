@@ -7,7 +7,6 @@
 
 import Foundation
 import UIKit
-import Combine
 
 struct RecentIdxList{
     public private(set) var list:[Int] = []
@@ -42,7 +41,6 @@ class LookAroundVC: UIViewController{
     lazy var datasBgColor: [UIColor] = {
         (0..<movieInfoModel.movie.count).map{_ in .random}
     }()
-    var subscription = Set<AnyCancellable>()
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var headerCollectionView: UICollectionView!
     override func viewDidLoad() {
@@ -51,7 +49,6 @@ class LookAroundVC: UIViewController{
         self.configureCollectionView()
         //MARK: -- 임시 데이터 뷰
         (0...4).forEach{recentMovieIdxList.append(idx: $0)}
-        
     }
     func presentNextView(index: Int){
         guard let _vc = storyboard?.instantiateViewController(withIdentifier: self.nextVC_Identifier) as? NextVC else { return }
@@ -139,10 +136,10 @@ extension LookAroundVC: UICollectionViewDelegate,UICollectionViewDataSource{
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RecentItemCell.identifier, for: indexPath) as? RecentItemCell,
-              let modelIdx = recentMovieIdxList.getModelIdx(row: indexPath.row)
-        else {return .init()
-        }
-        let data = movieInfoModel.movie[safe: modelIdx]!
+              let modelIdx = recentMovieIdxList.getModelIdx(row: indexPath.row),
+              let data = movieInfoModel.movie[safe: modelIdx]
+        else { return .init() }
+        
         cell.configure(title: data.title)
         return cell
     }

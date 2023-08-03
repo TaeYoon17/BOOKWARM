@@ -74,9 +74,6 @@ class DetailVC: UIViewController,MovieObserver{
         self.like = movie.like
         configure()
     }
-//    override func viewDidDisappear(_ animated: Bool) {
-//        super.viewDidDisappear(animated)
-//    }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         guard let headerBg else { return }
