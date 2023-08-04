@@ -76,7 +76,7 @@ class HomeCollectionVC: UICollectionViewController{
         nav.modalPresentationStyle = .fullScreen
         present(nav, animated: true)
     }
-    
+    //망함
 }
 //MARK: -- 서치바 Delegate
 extension HomeCollectionVC: UISearchBarDelegate{
