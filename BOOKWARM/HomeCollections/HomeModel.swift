@@ -46,4 +46,5 @@ class HomeModel{
             movie.title.contains(searchText)
         }
     }
+    //어떻게 하냐고...
 }
