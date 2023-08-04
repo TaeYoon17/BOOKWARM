@@ -44,6 +44,7 @@ class DetailVC: UIViewController,MovieObserver{
         didSet{
             guard like != oldValue else {return}
             if let item = self.navigationItem.rightBarButtonItem{
+                self.movie?.like = like
                 item.setLike(like: like)
             }else {
                 print("이상하다")

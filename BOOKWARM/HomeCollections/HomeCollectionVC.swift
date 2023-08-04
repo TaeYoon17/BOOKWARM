@@ -24,6 +24,7 @@ class HomeCollectionVC: UICollectionViewController{
             case .Search: model.infoType = .Search
             }
             self.collectionView.reloadData()
+            
         }
     }
     var searchText: String = ""{
@@ -76,7 +77,6 @@ class HomeCollectionVC: UICollectionViewController{
         nav.modalPresentationStyle = .fullScreen
         present(nav, animated: true)
     }
-    //망함
 }
 //MARK: -- 서치바 Delegate
 extension HomeCollectionVC: UISearchBarDelegate{
@@ -106,13 +106,17 @@ extension HomeCollectionVC{
             print("무엇인가 잘못됨!!")
             return .init()
         }
-        print(indexPath.row)
-        guard let (info,color) = model.getMovieModel(idx: indexPath.row) else {
+        print(#function,indexPath.row)
+        guard var (info,color) = model.getMovieModel(idx: indexPath.row) else {
             print("진짜 대형 사고")
             return .init()
         }
         cell.setCell(title: info.title, score: info.rate, like:info.like, bgColor: color,
-                     .init(handler: { _ in cell.like.toggle() }))
+                     .init(handler: {[weak self] _ in
+                         cell.like.toggle()
+                         info.like.toggle()
+                         self?.model.setList(index: indexPath.row, movie: info)
+                     }))
         return cell
     }
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -126,6 +130,10 @@ extension HomeCollectionVC{
         guard let (info,color) = model.getMovieModel(idx: indexPath.row) else {return}
         vc.movie = info
         vc.headerBg = color
+        vc.movieSubscriber = {[weak self] movie in
+            self?.model.setList(index: indexPath.row, movie: movie)
+            self?.collectionView.reloadData()
+        }
         self.navigationController?.pushViewController(vc, animated: true)
     }
     fileprivate func setCollectionLayouts(){

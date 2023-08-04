@@ -14,9 +14,19 @@ class HomeModel{
     }
     let movies = MovieInfo().movie
     private lazy var moviesColor = movies.map{_ in UIColor.random}
-    var movieModel = MovieInfo().movie.map{($0,UIColor.random)}
+    private var movieModel = MovieInfo().movie.map{($0,UIColor.random)}
     private var searchedMovies:[(Movie,UIColor)] = [].map{($0,UIColor.random)}
-    var infoType:HomeInfoType
+    private var indexList:[Int] = []
+    var infoType:HomeInfoType{
+        didSet{
+            switch infoType {
+            case .Search:
+                indexList = []
+            case .Read:
+                break
+            }
+        }
+    }
     init(infoType: HomeInfoType){
         self.infoType = infoType
     }
@@ -42,9 +52,19 @@ class HomeModel{
     }
     func setSearchList(searchText:String){
         guard infoType == .Search else {return}
-        self.searchedMovies = self.movieModel.filter { (movie,color) in
-            movie.title.contains(searchText)
-        }
+        let enus = self.movieModel.enumerated().filter{ $0.element.0.title.contains(searchText)}
+        self.indexList = enus.map{ $0.offset }
+        self.searchedMovies = enus.map{$0.element}
     }
     //어떻게 하냐고...
+    func setList(index: Int,movie:Movie){
+        switch infoType {
+        case .Search:
+            self.searchedMovies[index].0 = movie
+            let rawIndex = indexList[index]
+            self.movieModel[rawIndex].0 = movie
+        case .Read:
+            self.movieModel[index].0 = movie
+        }
+    }
 }
