@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		631362F82A8276EB00F9CAAE /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 631362F72A8276EB00F9CAAE /* .gitignore */; };
+		631362FA2A8276FB00F9CAAE /* API_Key.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631362F92A8276FB00F9CAAE /* API_Key.swift */; };
 		63650B3A2A7BF88D000C8458 /* HomeModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63650B392A7BF88D000C8458 /* HomeModel.swift */; };
 		63650B3C2A7C04BE000C8458 /* HomeLegacyCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63650B3B2A7C04BE000C8458 /* HomeLegacyCode.swift */; };
 		638DC5502A7A4C5D005D4ED5 /* LookAroundVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638DC54F2A7A4C5D005D4ED5 /* LookAroundVC.swift */; };
@@ -32,6 +34,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		631362F72A8276EB00F9CAAE /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
+		631362F92A8276FB00F9CAAE /* API_Key.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = API_Key.swift; sourceTree = "<group>"; };
 		63650B392A7BF88D000C8458 /* HomeModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeModel.swift; sourceTree = "<group>"; };
 		63650B3B2A7C04BE000C8458 /* HomeLegacyCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeLegacyCode.swift; sourceTree = "<group>"; };
 		638DC54F2A7A4C5D005D4ED5 /* LookAroundVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LookAroundVC.swift; sourceTree = "<group>"; };
@@ -114,6 +118,8 @@
 				63E7617B2A77A51D00A49A5E /* CollectionExtension.swift */,
 				63E761802A77A88000A49A5E /* UIColorExtension.swift */,
 				63E296A82A80AF190040F8BC /* Practice.swift */,
+				631362F72A8276EB00F9CAAE /* .gitignore */,
+				631362F92A8276FB00F9CAAE /* API_Key.swift */,
 			);
 			path = BOOKWARM;
 			sourceTree = "<group>";
@@ -214,6 +220,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				638DC5542A7A4E4D005D4ED5 /* TopItemTableViewCell.xib in Resources */,
+				631362F82A8276EB00F9CAAE /* .gitignore in Resources */,
 				63E761692A77A01A00A49A5E /* LaunchScreen.storyboard in Resources */,
 				63E761662A77A01A00A49A5E /* Assets.xcassets in Resources */,
 				63E761642A77A01900A49A5E /* Main.storyboard in Resources */,
@@ -242,6 +249,7 @@
 				63E7615F2A77A01900A49A5E /* SceneDelegate.swift in Sources */,
 				63E7617C2A77A51D00A49A5E /* CollectionExtension.swift in Sources */,
 				63650B3A2A7BF88D000C8458 /* HomeModel.swift in Sources */,
+				631362FA2A8276FB00F9CAAE /* API_Key.swift in Sources */,
 				63E761752A77A0B800A49A5E /* HomeCollectionViewCell.swift in Sources */,
 				63EEBB962A7A888500C29117 /* RecentItemCell.swift in Sources */,
 				638DC5502A7A4C5D005D4ED5 /* LookAroundVC.swift in Sources */,
