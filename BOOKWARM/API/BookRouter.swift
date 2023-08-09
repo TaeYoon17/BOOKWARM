@@ -13,7 +13,8 @@ enum BookRouter{
         case queryEncodingError
     }
     static let baseURL = "https://dapi.kakao.com/v3/search/book"
-    case search(query:String)
+    static let maxPage = 50
+    case search(query:String,page:Int = 1,size:Int = 10)
     var headers:HTTPHeaders{
         switch self{
         case .search:
@@ -28,9 +29,9 @@ enum BookRouter{
     }
     private var datapreprocess:(String?,HTTPMethod,HTTPHeaders){
         switch self{
-        case .search(let query):
+        case .search(let query,let page,let size):
             if let encodedQuery = query.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed){
-                return ("\(Self.baseURL)?query=\(encodedQuery)",method,headers)
+                return ("\(Self.baseURL)?query=\(encodedQuery)&page=\(page)&size=\(size)",method,headers)
             }else{
                 return (nil,method,headers)
             }
@@ -41,6 +42,8 @@ enum BookRouter{
         guard let str else {
             throw BookRouterError.queryEncodingError
         }
-        AF.request(str,method:method,headers:headers).responseJSON(completionHandler: completion)
+        AF.request(str,method:method,headers:headers)
+            .validate(statusCode:200...500)
+            .responseJSON(completionHandler: completion)
     }
 }
