@@ -8,14 +8,13 @@
 import UIKit
 import SwiftyJSON
 import Kingfisher
-class SearchVC: UIViewController{
+class SearchMainVC: UIViewController{
     static let identifier = "SearchVC"
-    @IBOutlet weak var collectionView: UICollectionView!
+    enum Section:Int,CaseIterable{ case keyword,result }
+    var collectionView: UICollectionView!
     var bookmodel: [Book] = []{
         didSet{ collectionView.reloadData() }
     }
-    let searchBar = UISearchBar()
-    
 //  ViewController State Data
     var searchText = ""
     var requestedPage = 0
@@ -24,10 +23,6 @@ class SearchVC: UIViewController{
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationItem.title = "검색화면"
-        self.navigationItem.leftBarButtonItem = .init(image: .init(systemName: "xmark"), style: .plain, target: self, action: #selector(Self.closeBtnTapped))
-        self.navigationItem.leftBarButtonItem?.tintColor = .black
-        self.navigationItem.titleView = searchBar
         configureSearchBar()
         configureCollectionView()
     }
@@ -59,52 +54,7 @@ class SearchVC: UIViewController{
     }
 }
 
-extension SearchVC: UICollectionViewDelegate, UICollectionViewDataSource,UICollectionViewDataSourcePrefetching{
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        bookmodel.count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HomeCollectionViewCell.identifier, for: indexPath) as? HomeCollectionViewCell else {return .init()}
-        let book = bookmodel[indexPath.row]
-        cell.bgColor = self.bookListColor[indexPath.row]
-        cell.searchVC_Configure(title: book.title, thumbnailURL: book.thumbnailURL, price: book.price)
-        return cell
-    }
-    func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
-        indexPaths.forEach { indexPath in
-            print(#function,indexPath.row,self.bookmodel.count)
-//            if indexPath.row > self.bookmodel.count - 5, requestedPage < BookRouter.maxPage,!self.isEnded{
-//                //여기서 request 로직 수행
-//                self.fetchList()
-//            }
-        }
-    }
-    
-    func configureCollectionView(){
-        self.collectionView.delegate = self
-        self.collectionView.dataSource = self
-        self.collectionView.prefetchDataSource = self
-        self.collectionView.register(.init(nibName: HomeCollectionViewCell.identifier, bundle: nil), forCellWithReuseIdentifier: HomeCollectionViewCell.identifier)
-        setCollectionLayouts()
-    }
-    private func setCollectionLayouts(){
-        let layout = UICollectionViewFlowLayout()
-        let spacing:CGFloat = 20; let groupItemsCount = 2;
-        let cellWidth: Int = (Int(UIScreen.main.bounds.width) -
-                              Int(spacing) * (groupItemsCount + 1)) / groupItemsCount
-        guard cellWidth > 0  else { fatalError("이건 아니지") }
-        layout.itemSize = .init(width: cellWidth,height: cellWidth)
-        layout.sectionInset = .init(top: spacing, left: spacing,
-                                    bottom: spacing, right: spacing)
-        // 그룹간의 간격
-        layout.minimumLineSpacing = spacing
-        // 아이템간의 간격
-        layout.minimumInteritemSpacing = spacing
-        collectionView.collectionViewLayout = layout
-    }
-}
-extension SearchVC: UIScrollViewDelegate{
+extension SearchMainVC: UIScrollViewDelegate{
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if scrollView.contentOffset.y + scrollView.frame.height > scrollView.contentSize.height - 40{
             fetchList()
@@ -113,10 +63,16 @@ extension SearchVC: UIScrollViewDelegate{
 }
 
 
-extension SearchVC: UISearchBarDelegate{
+extension SearchMainVC: UISearchBarDelegate{
     func configureSearchBar(){
-        searchBar.placeholder = "검색할 책을 입력하세요"; searchBar.text = searchText
-        searchBar.delegate = self
+        let searchController = UISearchController(searchResultsController: SearchingVC())
+        searchController.searchBar.delegate = self
+        searchController.searchBar.placeholder = "도서를 검색하세요"
+        searchController.obscuresBackgroundDuringPresentation = false
+        self.navigationItem.searchController = searchController
+        self.navigationItem.hidesSearchBarWhenScrolling = false
+//        searchBar.placeholder = "검색할 책을 입력하세요"; searchBar.text = searchText
+//        searchBar.delegate = self
     }
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         guard let text = searchBar.text,text != searchText else {return}
@@ -164,3 +120,19 @@ extension Book{
         }
     }
 }
+// MARK: -- Legacy dataFlowLayout
+//let layout = {
+//    let layout = UICollectionViewFlowLayout()
+//    let spacing:CGFloat = 20; let groupItemsCount = 2;
+//    let cellWidth: Int = (Int(UIScreen.main.bounds.width) -
+//                          Int(spacing) * (groupItemsCount + 1)) / groupItemsCount
+//    guard cellWidth > 0  else { fatalError("이건 아니지") }
+//    layout.itemSize = .init(width: cellWidth,height: cellWidth)
+//    layout.sectionInset = .init(top: spacing, left: spacing,
+//                                bottom: spacing, right: spacing)
+//    // 그룹간의 간격
+//    layout.minimumLineSpacing = spacing
+//    // 아이템간의 간격
+//    layout.minimumInteritemSpacing = spacing
+//    return layout
+//}()

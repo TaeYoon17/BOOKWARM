@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6302DA612AA5BE6F0054CBB2 /* Realm in Frameworks */ = {isa = PBXBuildFile; productRef = 6302DA602AA5BE6F0054CBB2 /* Realm */; };
+		6302DA632AA5BE6F0054CBB2 /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 6302DA622AA5BE6F0054CBB2 /* RealmSwift */; };
+		6302DA652AA5C4DA0054CBB2 /* SearchingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6302DA642AA5C4DA0054CBB2 /* SearchingVC.swift */; };
+		6302DA682AA5C7290054CBB2 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 6302DA672AA5C7290054CBB2 /* SnapKit */; };
+		6302DA6A2AA5CB9B0054CBB2 /* BookCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6302DA692AA5CB9B0054CBB2 /* BookCategory.swift */; };
+		6302DA6E2AA5D73F0054CBB2 /* SearchMainVC + UICollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6302DA6D2AA5D73F0054CBB2 /* SearchMainVC + UICollectionView.swift */; };
 		631362F82A8276EB00F9CAAE /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 631362F72A8276EB00F9CAAE /* .gitignore */; };
 		631362FA2A8276FB00F9CAAE /* API_Key.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631362F92A8276FB00F9CAAE /* API_Key.swift */; };
 		631362FD2A82783B00F9CAAE /* BookRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631362FC2A82783B00F9CAAE /* BookRouter.swift */; };
@@ -31,7 +37,7 @@
 		63E761782A77A41800A49A5E /* MovieInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E761772A77A41800A49A5E /* MovieInfo.swift */; };
 		63E7617A2A77A42A00A49A5E /* MovieModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E761792A77A42A00A49A5E /* MovieModel.swift */; };
 		63E7617C2A77A51D00A49A5E /* CollectionExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E7617B2A77A51D00A49A5E /* CollectionExtension.swift */; };
-		63E7617F2A77A62400A49A5E /* SearchVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E7617E2A77A62400A49A5E /* SearchVC.swift */; };
+		63E7617F2A77A62400A49A5E /* SearchMainVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E7617E2A77A62400A49A5E /* SearchMainVC.swift */; };
 		63E761812A77A88000A49A5E /* UIColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E761802A77A88000A49A5E /* UIColorExtension.swift */; };
 		63E761842A77C17E00A49A5E /* DetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E761832A77C17E00A49A5E /* DetailVC.swift */; };
 		63EEBB962A7A888500C29117 /* RecentItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63EEBB942A7A888500C29117 /* RecentItemCell.swift */; };
@@ -39,6 +45,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		6302DA642AA5C4DA0054CBB2 /* SearchingVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchingVC.swift; sourceTree = "<group>"; };
+		6302DA692AA5CB9B0054CBB2 /* BookCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookCategory.swift; sourceTree = "<group>"; };
+		6302DA6D2AA5D73F0054CBB2 /* SearchMainVC + UICollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SearchMainVC + UICollectionView.swift"; sourceTree = "<group>"; };
 		631362F72A8276EB00F9CAAE /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		631362F92A8276FB00F9CAAE /* API_Key.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = API_Key.swift; sourceTree = "<group>"; };
 		631362FC2A82783B00F9CAAE /* BookRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookRouter.swift; sourceTree = "<group>"; };
@@ -62,7 +71,7 @@
 		63E761772A77A41800A49A5E /* MovieInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieInfo.swift; sourceTree = "<group>"; };
 		63E761792A77A42A00A49A5E /* MovieModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieModel.swift; sourceTree = "<group>"; };
 		63E7617B2A77A51D00A49A5E /* CollectionExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionExtension.swift; sourceTree = "<group>"; };
-		63E7617E2A77A62400A49A5E /* SearchVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchVC.swift; sourceTree = "<group>"; };
+		63E7617E2A77A62400A49A5E /* SearchMainVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchMainVC.swift; sourceTree = "<group>"; };
 		63E761802A77A88000A49A5E /* UIColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColorExtension.swift; sourceTree = "<group>"; };
 		63E761832A77C17E00A49A5E /* DetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailVC.swift; sourceTree = "<group>"; };
 		63EEBB942A7A888500C29117 /* RecentItemCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentItemCell.swift; sourceTree = "<group>"; };
@@ -76,6 +85,9 @@
 			files = (
 				63157EEF2A8371AF005E9A98 /* Kingfisher in Frameworks */,
 				631363032A8280EE00F9CAAE /* SwiftyJSON in Frameworks */,
+				6302DA612AA5BE6F0054CBB2 /* Realm in Frameworks */,
+				6302DA682AA5C7290054CBB2 /* SnapKit in Frameworks */,
+				6302DA632AA5BE6F0054CBB2 /* RealmSwift in Frameworks */,
 				631363002A82784E00F9CAAE /* Alamofire in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -158,7 +170,9 @@
 		63E7617D2A77A61C00A49A5E /* SearchGroup */ = {
 			isa = PBXGroup;
 			children = (
-				63E7617E2A77A62400A49A5E /* SearchVC.swift */,
+				63E7617E2A77A62400A49A5E /* SearchMainVC.swift */,
+				6302DA642AA5C4DA0054CBB2 /* SearchingVC.swift */,
+				6302DA6D2AA5D73F0054CBB2 /* SearchMainVC + UICollectionView.swift */,
 			);
 			path = SearchGroup;
 			sourceTree = "<group>";
@@ -177,6 +191,7 @@
 				63E761772A77A41800A49A5E /* MovieInfo.swift */,
 				63E761792A77A42A00A49A5E /* MovieModel.swift */,
 				63157EEB2A836459005E9A98 /* Book.swift */,
+				6302DA692AA5CB9B0054CBB2 /* BookCategory.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -201,6 +216,9 @@
 				631362FF2A82784E00F9CAAE /* Alamofire */,
 				631363022A8280EE00F9CAAE /* SwiftyJSON */,
 				63157EEE2A8371AF005E9A98 /* Kingfisher */,
+				6302DA602AA5BE6F0054CBB2 /* Realm */,
+				6302DA622AA5BE6F0054CBB2 /* RealmSwift */,
+				6302DA672AA5C7290054CBB2 /* SnapKit */,
 			);
 			productName = BOOKWARM;
 			productReference = 63E761592A77A01900A49A5E /* BOOKWARM.app */;
@@ -234,6 +252,8 @@
 				631362FE2A82784E00F9CAAE /* XCRemoteSwiftPackageReference "Alamofire" */,
 				631363012A8280EE00F9CAAE /* XCRemoteSwiftPackageReference "SwiftyJSON" */,
 				63157EED2A8371AF005E9A98 /* XCRemoteSwiftPackageReference "Kingfisher" */,
+				6302DA5F2AA5BE6F0054CBB2 /* XCRemoteSwiftPackageReference "realm-swift" */,
+				6302DA662AA5C7290054CBB2 /* XCRemoteSwiftPackageReference "SnapKit" */,
 			);
 			productRefGroup = 63E7615A2A77A01900A49A5E /* Products */;
 			projectDirPath = "";
@@ -266,7 +286,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				63E7617F2A77A62400A49A5E /* SearchVC.swift in Sources */,
+				63E7617F2A77A62400A49A5E /* SearchMainVC.swift in Sources */,
 				63E7617A2A77A42A00A49A5E /* MovieModel.swift in Sources */,
 				63650B3C2A7C04BE000C8458 /* HomeLegacyCode.swift in Sources */,
 				638DC5532A7A4E4D005D4ED5 /* TopItemTableViewCell.swift in Sources */,
@@ -274,7 +294,10 @@
 				63E7615D2A77A01900A49A5E /* AppDelegate.swift in Sources */,
 				63E761782A77A41800A49A5E /* MovieInfo.swift in Sources */,
 				63E761722A77A08E00A49A5E /* HomeCollectionVC.swift in Sources */,
+				6302DA6E2AA5D73F0054CBB2 /* SearchMainVC + UICollectionView.swift in Sources */,
 				63E761842A77C17E00A49A5E /* DetailVC.swift in Sources */,
+				6302DA6A2AA5CB9B0054CBB2 /* BookCategory.swift in Sources */,
+				6302DA652AA5C4DA0054CBB2 /* SearchingVC.swift in Sources */,
 				63E761812A77A88000A49A5E /* UIColorExtension.swift in Sources */,
 				63E7615F2A77A01900A49A5E /* SceneDelegate.swift in Sources */,
 				63157EEC2A836459005E9A98 /* Book.swift in Sources */,
@@ -510,6 +533,22 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		6302DA5F2AA5BE6F0054CBB2 /* XCRemoteSwiftPackageReference "realm-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/realm/realm-swift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 10.42.1;
+			};
+		};
+		6302DA662AA5C7290054CBB2 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SnapKit/SnapKit.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.0;
+			};
+		};
 		631362FE2A82784E00F9CAAE /* XCRemoteSwiftPackageReference "Alamofire" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
@@ -537,6 +576,21 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		6302DA602AA5BE6F0054CBB2 /* Realm */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6302DA5F2AA5BE6F0054CBB2 /* XCRemoteSwiftPackageReference "realm-swift" */;
+			productName = Realm;
+		};
+		6302DA622AA5BE6F0054CBB2 /* RealmSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6302DA5F2AA5BE6F0054CBB2 /* XCRemoteSwiftPackageReference "realm-swift" */;
+			productName = RealmSwift;
+		};
+		6302DA672AA5C7290054CBB2 /* SnapKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6302DA662AA5C7290054CBB2 /* XCRemoteSwiftPackageReference "SnapKit" */;
+			productName = SnapKit;
+		};
 		631362FF2A82784E00F9CAAE /* Alamofire */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 631362FE2A82784E00F9CAAE /* XCRemoteSwiftPackageReference "Alamofire" */;
