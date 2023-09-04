@@ -6,7 +6,7 @@
 //
 
 import Foundation
-struct Book: Codable{
+struct Book: Codable,Hashable{
     let authors: [String]
     let conetnts: String
     let datetime: Date

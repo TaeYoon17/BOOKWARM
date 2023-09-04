@@ -10,8 +10,22 @@ import SwiftyJSON
 import Kingfisher
 class SearchMainVC: UIViewController{
     static let identifier = "SearchVC"
-    enum Section:Int,CaseIterable{ case keyword,result }
+    enum Section:Int,CaseIterable{
+        case keyword,result
+        enum Item:Hashable{
+            case keyword(category: BookCategory)
+            case result(book: Book)
+        }
+        var koreanDescription:String{
+            switch self{
+            case .keyword: return "추천 검색어"
+            case .result: return "검색 결과"
+            }
+        }
+    }
     var collectionView: UICollectionView!
+    var diffableDataSource: UICollectionViewDiffableDataSource<Section,Section.Item>!
+    var categoryModel = BookCategory.allCases
     var bookmodel: [Book] = []{
         didSet{ collectionView.reloadData() }
     }
@@ -20,14 +34,86 @@ class SearchMainVC: UIViewController{
     var requestedPage = 0
     var isEnded = false
     var bookListColor:[UIColor] = []
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         configureSearchBar()
         configureCollectionView()
+        configureDataSource()
     }
     @objc func closeBtnTapped(){ self.dismiss(animated: true) }
     
+    func configureDataSource(){
+        let keywordHeaderRegistration = UICollectionView.SupplementaryRegistration<TempHeaderView>(elementKind: UICollectionView.elementKindSectionHeader) { supplementaryView, elementKind, indexPath in
+            guard let section = Section(rawValue: indexPath.section) else {return}
+            supplementaryView.titleLabel.text = section.koreanDescription
+            supplementaryView.titleLabel.font = .systemFont(ofSize: 22, weight: .semibold)
+        }
+        let keywordCellRegistration = UICollectionView.CellRegistration<KeywordCell,Section.Item> { cell, indexPath, itemIdentifier in
+            switch itemIdentifier{
+            case .keyword(category: let category):
+                cell.imageView.image = UIImage(named: category.rawValue)
+                cell.infoLabel.text = BookCategory.korean[category]
+            default: fatalError("이럴 수가 없음..!")
+            }
+        }
+        let resultHeaderRegistration = UICollectionView.SupplementaryRegistration<UICollectionViewListCell>(elementKind: UICollectionView.elementKindSectionHeader) { supplementaryView, elementKind, indexPath in
+            guard let section = Section(rawValue: indexPath.section) else {return}
+            var config = supplementaryView.defaultContentConfiguration()
+            config.text = section.koreanDescription
+        }
+        let resultcCellRegistration = UICollectionView.CellRegistration<HomeCollectionViewCell,Section.Item>{[weak self] cell, indexPath, item in
+            switch item{
+            case .result(book: let book):
+                cell.bgColor = self?.bookListColor[indexPath.row]
+                cell.searchVC_Configure(title: book.title, thumbnailURL: book.thumbnailURL, price: book.price)
+            default: fatalError("이럴 수가 없음..!")
+            }
+        }
+        self.diffableDataSource = .init(collectionView: collectionView, cellProvider: { collectionView, indexPath, itemIdentifier in
+                return collectionView.dequeueConfiguredReusableCell(using: keywordCellRegistration, for: indexPath, item: itemIdentifier)
+        })
+        self.diffableDataSource.supplementaryViewProvider = { c,elementKind,indexPath -> UICollectionReusableView? in
+            guard let section = Section(rawValue: indexPath.section) else {return nil}
+            switch elementKind{
+            case UICollectionView.elementKindSectionHeader:
+                switch section{
+                case .keyword:
+                    let cell = c.dequeueConfiguredReusableSupplementary(using: keywordHeaderRegistration, for: indexPath)
+                    DispatchQueue.main.async{
+                        cell.layer.cornerRadius = 20
+                    }
+                    return cell
+                case .result:
+                    return c.dequeueConfiguredReusableSupplementary(using: resultHeaderRegistration, for: indexPath)
+                }
+            default: return nil
+            }
+        }
+        dataSourceToKeyword()
+    }
+    func dataSourceToKeyword(){
+        var snapshot = NSDiffableDataSourceSnapshot<Section,Section.Item>()
+        snapshot.appendSections([.keyword])
+        snapshot.appendItems(categoryModel.map{.keyword(category: $0)},toSection: .keyword)
+        diffableDataSource.apply(snapshot,animatingDifferences: true)
+    }
+    func dataSourceToResult(){
+        var snapshot = NSDiffableDataSourceSnapshot<Section,Section.Item>()
+        snapshot.appendSections([.result])
+        snapshot.appendItems(bookmodel.map{.result(book: $0)},toSection: .result)
+        diffableDataSource.apply(snapshot,animatingDifferences: true)
+    }
+}
+
+extension SearchMainVC: UIScrollViewDelegate{
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if scrollView.contentOffset.y + scrollView.frame.height > scrollView.contentSize.height - 40{
+            fetchList()
+        }
+    }
+}
+//MARK: -- 데이터 가져오는 코드
+extension SearchMainVC{
     func fetchList(){
         do{
             let newPage = requestedPage + 1
@@ -53,15 +139,6 @@ class SearchMainVC: UIViewController{
         }
     }
 }
-
-extension SearchMainVC: UIScrollViewDelegate{
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if scrollView.contentOffset.y + scrollView.frame.height > scrollView.contentSize.height - 40{
-            fetchList()
-        }
-    }
-}
-
 
 extension SearchMainVC: UISearchBarDelegate{
     func configureSearchBar(){
