@@ -10,77 +10,123 @@ import SnapKit
 import SwiftyJSON
 import RealmSwift
 class SearchingVC: UIViewController{
-    enum Section:Int{ case searching,result }
-    enum Item:Hashable{
-        case book(item:Book,color:UIColor?)
+    enum Section:Int{
+        case searching,result
+        var koreanDescription:String{
+            switch self{
+            case .result: return "검색 결과"
+            case .searching: return "최근 검색 값"
+            }
+        }
     }
-    var nowStatus = Section.searching
+    enum Item:Hashable{
+        case result(item:Book,color:UIColor?)
+        case recent(item:BookTable,color:UIColor?)
+    }
+    var nowStatus = Section.searching{
+        didSet{ dataSourceUpdating() }
+    }
     var collectionView: UICollectionView!
     var diffableDataSource: UICollectionViewDiffableDataSource<Section,Item>!
+    weak var searchBar: UISearchBar!
     var bookListColor:[UIColor] = []
     var bookmodel: [Book] = []
     var searchText = ""
     var requestedPage = 0
     var isEnded = false
-    
+    var realm: Realm!
+    var tasks: Results<BookTable>!
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.backgroundColor = .red
-    
+        realm = try! Realm()
+        self.tasks = realm.objects(BookTable.self).sorted(byKeyPath: "title",ascending: false)
         configureCollectionView()
         configureDataSource()
     }
     func configureDataSource(){
         //MARK:-- 헤더를 넣을 수도..?
-//        let keywordHeaderRegistration = UICollectionView.SupplementaryRegistration<TempHeaderView>(elementKind: UICollectionView.elementKindSectionHeader) { supplementaryView, elementKind, indexPath in
-//            guard let section = Section(rawValue: indexPath.section) else {return}
-//            supplementaryView.titleLabel.text = section.koreanDescription
-//            supplementaryView.titleLabel.font = .systemFont(ofSize: 22, weight: .semibold)
-//        }
+        let headerRegistration = UICollectionView.SupplementaryRegistration<TempHeaderView>(elementKind: UICollectionView.elementKindSectionHeader) { supplementaryView, elementKind, indexPath in
+            guard let section = Section(rawValue: indexPath.section) else {return}
+            switch section{
+            case .result: break
+            case .searching:
+                supplementaryView.titleLabel.font = .systemFont(ofSize: 22, weight: .semibold)
+                supplementaryView.titleLabel.text = section.koreanDescription
+            }
+        }
         let resultcCellRegistration = UICollectionView.CellRegistration<HomeCollectionViewCell,Item>{[weak self] cell, indexPath, item in
             switch item{
-            case .book(item: let item,color: let color):
+            case .result(item: let item,color: let color):
                 cell.bgColor = color
                 cell.searchVC_Configure(title: item.title, thumbnailURL: item.thumbnailURL, price: item.price)
-            default: fatalError("이럴 수가 없음..!")
+            case .recent(item: let item, color: let color):
+                cell.bgColor = color
+                cell.searchVC_Configure(title: item.title, thumbnailURL: item.thumbnailURL, price: item.price)
             }
         }
         self.diffableDataSource = UICollectionViewDiffableDataSource<Section,Item>(collectionView: collectionView, cellProvider: { collectionView, indexPath, item in
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HomeCollectionViewCell.identifier, for: indexPath) as? HomeCollectionViewCell else {return UICollectionViewCell()}
-            cell.bgColor = self.bookListColor[indexPath.row]
             switch item{
-            case .book(item: let item,color: _):
+            case .result(item: let item,color: let color):
+                cell.bgColor = color
+                cell.searchVC_Configure(title: item.title, thumbnailURL: item.thumbnailURL, price: item.price)
+            case .recent(item: let item,color: let color):
+                cell.bgColor = color
                 cell.searchVC_Configure(title: item.title, thumbnailURL: item.thumbnailURL, price: item.price)
             }
             return cell
         })
         //MARK: -- 헤더를 넣을 수도..?
-//        self.diffableDataSource.supplementaryViewProvider = { c,elementKind,indexPath -> UICollectionReusableView? in
-//            guard let section = Section(rawValue: indexPath.section) else {return nil}
-//            switch elementKind{
-//            case UICollectionView.elementKindSectionHeader:
-//                switch section{
-//                case .keyword:
-//                    let cell = c.dequeueConfiguredReusableSupplementary(using: keywordHeaderRegistration, for: indexPath)
-//                    DispatchQueue.main.async{
-//                        cell.layer.cornerRadius = 20
-//                    }
-//                    return cell
-//                case .result:
-//                    return c.dequeueConfiguredReusableSupplementary(using: resultHeaderRegistration, for: indexPath)
-//                }
-//            default: return nil
-//            }
-//        }
-        dataSourceToResult()
+        self.diffableDataSource.supplementaryViewProvider = { c,elementKind,indexPath -> UICollectionReusableView? in
+            guard let section = Section(rawValue: indexPath.section) else {return nil}
+            switch elementKind{
+            case UICollectionView.elementKindSectionHeader:
+                switch section{
+                case .searching:
+                    let cell = c.dequeueConfiguredReusableSupplementary(using: headerRegistration, for: indexPath)
+                    DispatchQueue.main.async{
+                        cell.layer.cornerRadius = 20
+                    }
+                    return cell
+                case .result: return nil
+                }
+            default: return nil
+            }
+        }
+        dataSourceUpdating()
     }
-    func dataSourceToSearching(){ }
-    func dataSourceToResult(){
-        var snapshot = NSDiffableDataSourceSnapshot<Section,Item>()
-        snapshot.appendSections([.result])
-        let items:[Item] = zip(bookmodel, bookListColor).map{.book(item:$0,color:$1)}
-        snapshot.appendItems(items,toSection: .result)
-        self.diffableDataSource.apply(snapshot,animatingDifferences: true)
+    
+}
+extension SearchingVC{
+    func dataSourceUpdating(){
+        func dataSourceToSearching(){
+            DispatchQueue.main.async {
+                    let items:[Item] = self.tasks.map{.recent(item: $0, color: .random)}
+                    var snapshot = NSDiffableDataSourceSnapshot<Section,Item>()
+                    self.collectionView.collectionViewLayout = self.compositionalLayout
+                    snapshot.appendSections([.searching])
+                    snapshot.appendItems(items,toSection: .searching)
+                    self.diffableDataSource.apply(snapshot,animatingDifferences: true)
+            }
+        }
+        func dataSourceToResult(){
+            DispatchQueue.global().async {
+                let items:[Item] = zip(self.bookmodel, self.bookListColor).map{.result(item:$0,color:$1)}
+                DispatchQueue.main.async {
+                    var snapshot = NSDiffableDataSourceSnapshot<Section,Item>()
+                    snapshot.appendSections([.result])
+                    snapshot.appendItems(items,toSection: .result)
+                    self.collectionView.collectionViewLayout = self.compositionalLayout
+                    self.diffableDataSource.apply(snapshot,animatingDifferences: true)
+                }
+            }
+        }
+        switch self.nowStatus{
+        case .result:
+            dataSourceToResult()
+        case .searching:
+            dataSourceToSearching()
+        }
     }
 }
 extension SearchingVC{
@@ -94,14 +140,13 @@ extension SearchingVC{
                     let json = JSON(data)
                     if let arrayValue = json["documents"].array{
                         self?.isEnded = json["meta"]["is_end"].boolValue
-//                        print(self?.isEnded)
+                        //                        print(self?.isEnded)
                         let list = Book.getBookLists(jsonList: arrayValue)
                         self?.bookmodel.append(contentsOf: list)
                         self?.bookListColor.append(contentsOf: list.map{_ in UIColor.random})
                         self?.requestedPage = newPage
-                        DispatchQueue.main.async {
-                            self?.dataSourceToResult()
-                        }
+                        self?.nowStatus = .result
+                        self?.dataSourceUpdating()
                     }
                 case .failure(let err):
                     print(err)
@@ -117,16 +162,16 @@ extension SearchingVC:UICollectionViewDelegate,UIScrollViewDelegate,UICollection
     func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
         indexPaths.forEach { indexPath in
             print(#function,indexPath.row,self.bookmodel.count)
-//            if indexPath.row > self.bookmodel.count - 5, requestedPage < BookRouter.maxPage,!self.isEnded{
-//                //여기서 request 로직 수행
-//                self.fetchList()
-//            }
+            //            if indexPath.row > self.bookmodel.count - 5, requestedPage < BookRouter.maxPage,!self.isEnded{
+            //                //여기서 request 로직 수행
+            //                self.fetchList()
+            //            }
         }
     }
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if scrollView.contentOffset.y + scrollView.frame.height > scrollView.contentSize.height - 40{
-            searchQuery()
-        }
+        let canScroll = scrollView.contentOffset.y + scrollView.frame.height > scrollView.contentSize.height - 40
+        if canScroll && nowStatus == .result{ searchQuery() }
+        searchBar.endEditing(true)
     }
     
     
@@ -134,7 +179,7 @@ extension SearchingVC:UICollectionViewDelegate,UIScrollViewDelegate,UICollection
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let item = diffableDataSource.itemIdentifier(for: indexPath) else {return}
         switch item{
-        case let .book(item: book, color: _):
+        case let .result(item: book, color: _):
             let realm = try! Realm()
             let task = BookTable(book: book)
             try! realm.write{
@@ -142,6 +187,7 @@ extension SearchingVC:UICollectionViewDelegate,UIScrollViewDelegate,UICollection
                 print(task)
                 print("Real Add Succeed")
             }
+        default: break
         }
     }
     
@@ -178,7 +224,13 @@ extension SearchingVC:UICollectionViewDelegate,UIScrollViewDelegate,UICollection
             let sectionHeader = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .absolute(32)), elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
             sectionHeader.contentInsets = .init(top: 0, leading: 20, bottom: 0, trailing: 20)
             let section = NSCollectionLayoutSection(group: group)
-//            section.boundarySupplementaryItems = [sectionHeader]
+            switch sectionType{
+            case .searching:
+                if self.nowStatus == .searching{
+                    section.boundarySupplementaryItems = [sectionHeader]
+                }
+            case .result: break
+            }
             return section
         }
         return layout

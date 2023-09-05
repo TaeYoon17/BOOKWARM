@@ -24,6 +24,7 @@ struct Book: Codable,Hashable{
 }
 class BookTable:Object{
     @Persisted(primaryKey: true) var _id: ObjectId
+    @Persisted var title: String
     @Persisted var isbn : String
     @Persisted var price: Int
     @Persisted var thumbnailURL: String
@@ -31,6 +32,7 @@ class BookTable:Object{
     @Persisted var userLike: Bool?
     convenience init(book: Book){
         self.init()
+        title = book.title
         isbn = book.isbn
         price = book.price
         thumbnailURL = book.thumbnailURL

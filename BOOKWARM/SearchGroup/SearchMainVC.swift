@@ -125,7 +125,7 @@ extension SearchMainVC{
                             self?.searchingVC.nowStatus = .searching
                             self?.searchingVC.bookListColor = self!.bookListColor
                             self?.searchingVC.bookmodel = self!.bookmodel
-                            self?.searchingVC.dataSourceToResult()
+//                            self?.searchingVC.dataSourceToResult()
                         }
                     }
                 case .failure(let err):
@@ -144,13 +144,11 @@ extension SearchMainVC:UISearchControllerDelegate,UISearchBarDelegate{
         let searchController = UISearchController(searchResultsController: searchingVC)
         searchController.searchBar.delegate = self
         searchController.delegate = self
-//        searchingVC.collectionView.delegate = self
         searchController.searchBar.placeholder = "도서를 검색하세요"
         searchController.obscuresBackgroundDuringPresentation = false
+        searchingVC.searchBar = searchController.searchBar
         self.navigationItem.searchController = searchController
         self.navigationItem.hidesSearchBarWhenScrolling = false
-//        searchBar.placeholder = "검색할 책을 입력하세요"; searchBar.text = searchText
-//        searchBar.delegate = self
     }
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         guard let text = searchBar.text,text != searchText else {return}
@@ -159,6 +157,14 @@ extension SearchMainVC:UISearchControllerDelegate,UISearchBarDelegate{
         self.searchingVC.bookListColor.removeAll();self.bookmodel.removeAll()
         self.searchingVC.searchQuery()
         searchBar.resignFirstResponder()
+    }
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        print(#function)
+    }
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if self.searchingVC.nowStatus != .searching{
+            self.searchingVC.nowStatus = .searching
+        }
     }
 }
 extension SearchMainVC: UIScrollViewDelegate{
