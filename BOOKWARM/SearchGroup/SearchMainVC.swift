@@ -26,14 +26,13 @@ class SearchMainVC: UIViewController{
     var collectionView: UICollectionView!
     var diffableDataSource: UICollectionViewDiffableDataSource<Section,Section.Item>!
     var categoryModel = BookCategory.allCases
-    var bookmodel: [Book] = []{
-        didSet{ collectionView.reloadData() }
-    }
+    var bookmodel: [Book] = []
 //  ViewController State Data
     var searchText = ""
     var requestedPage = 0
     var isEnded = false
     var bookListColor:[UIColor] = []
+    var searchingVC = SearchingVC()
     override func viewDidLoad() {
         super.viewDidLoad()
         configureSearchBar()
@@ -105,13 +104,7 @@ class SearchMainVC: UIViewController{
     }
 }
 
-extension SearchMainVC: UIScrollViewDelegate{
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if scrollView.contentOffset.y + scrollView.frame.height > scrollView.contentSize.height - 40{
-            fetchList()
-        }
-    }
-}
+
 //MARK: -- 데이터 가져오는 코드
 extension SearchMainVC{
     func fetchList(){
@@ -123,11 +116,17 @@ extension SearchMainVC{
                     let json = JSON(data)
                     if let arrayValue = json["documents"].array{
                         self?.isEnded = json["meta"]["is_end"].boolValue
-                        print(self?.isEnded)
+//                        print(self?.isEnded)
                         let list = Book.getBookLists(jsonList: arrayValue)
                         self?.bookmodel.append(contentsOf: list)
                         self?.bookListColor.append(contentsOf: list.map{_ in UIColor.random})
                         self?.requestedPage = newPage
+                        DispatchQueue.main.async {
+                            self?.searchingVC.nowStatus = .searching
+                            self?.searchingVC.bookListColor = self!.bookListColor
+                            self?.searchingVC.bookmodel = self!.bookmodel
+                            self?.searchingVC.dataSourceToResult()
+                        }
                     }
                 case .failure(let err):
                     print(err)
@@ -140,10 +139,12 @@ extension SearchMainVC{
     }
 }
 
-extension SearchMainVC: UISearchBarDelegate{
+extension SearchMainVC:UISearchControllerDelegate,UISearchBarDelegate{
     func configureSearchBar(){
-        let searchController = UISearchController(searchResultsController: SearchingVC())
+        let searchController = UISearchController(searchResultsController: searchingVC)
         searchController.searchBar.delegate = self
+        searchController.delegate = self
+//        searchingVC.collectionView.delegate = self
         searchController.searchBar.placeholder = "도서를 검색하세요"
         searchController.obscuresBackgroundDuringPresentation = false
         self.navigationItem.searchController = searchController
@@ -153,10 +154,18 @@ extension SearchMainVC: UISearchBarDelegate{
     }
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         guard let text = searchBar.text,text != searchText else {return}
-        self.searchText = text; self.requestedPage = 0
-        self.bookListColor.removeAll();self.bookmodel.removeAll()
-        self.fetchList()
+        print(text)
+        self.searchingVC.searchText = text;self.searchingVC.requestedPage = 0
+        self.searchingVC.bookListColor.removeAll();self.bookmodel.removeAll()
+        self.searchingVC.searchQuery()
         searchBar.resignFirstResponder()
+    }
+}
+extension SearchMainVC: UIScrollViewDelegate{
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if scrollView.contentOffset.y + scrollView.frame.height > scrollView.contentSize.height - 40{
+            fetchList()
+        }
     }
 }
 extension UIAlertController{

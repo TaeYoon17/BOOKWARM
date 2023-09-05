@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import RealmSwift
 struct Book: Codable,Hashable{
     let authors: [String]
     let conetnts: String
@@ -19,6 +20,23 @@ struct Book: Codable,Hashable{
     let title: String
     let translators: [String]
     let linkURL: String
+    var userLike: Bool?
+}
+class BookTable:Object{
+    @Persisted(primaryKey: true) var _id: ObjectId
+    @Persisted var isbn : String
+    @Persisted var price: Int
+    @Persisted var thumbnailURL: String
+    @Persisted var contents: String
+    @Persisted var userLike: Bool?
+    convenience init(book: Book){
+        self.init()
+        isbn = book.isbn
+        price = book.price
+        thumbnailURL = book.thumbnailURL
+        contents = book.conetnts
+        userLike = book.userLike
+    }
 }
 /*
 {
