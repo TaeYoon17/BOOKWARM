@@ -69,7 +69,7 @@ class HomeCollectionVC: UICollectionViewController{
     }
     @IBAction func searchItemTapped(_ sender: UIBarButtonItem) {
         print(#function)
-        guard let vc = storyboard?.instantiateViewController(withIdentifier: SearchVC.identifier) as? SearchVC else {
+        guard let vc = storyboard?.instantiateViewController(withIdentifier: SearchMainVC.identifier) as? SearchMainVC else {
             print("이건 안된다..!")
             return
         }

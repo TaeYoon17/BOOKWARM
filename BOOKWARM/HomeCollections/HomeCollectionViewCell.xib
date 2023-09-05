@@ -35,7 +35,7 @@
                                     <imageReference key="image" image="heart" catalog="system" symbolScale="medium"/>
                                 </buttonConfiguration>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gTT-Wg-8x3">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" verticalCompressionResistancePriority="749" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gTT-Wg-8x3">
                                 <rect key="frame" x="16.000000000000004" y="203.66666666666666" width="41.333333333333343" height="20.333333333333343"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
@@ -61,6 +61,7 @@
                             <constraint firstItem="kC5-H6-Fi0" firstAttribute="top" secondItem="xmh-3R-nfL" secondAttribute="top" constant="16" id="op7-bR-WNH"/>
                             <constraint firstItem="gTT-Wg-8x3" firstAttribute="trailing" relation="lessThanOrEqual" secondItem="UmF-AA-ZO2" secondAttribute="leading" id="pmE-uQ-Y8A"/>
                             <constraint firstAttribute="bottom" secondItem="gTT-Wg-8x3" secondAttribute="bottom" constant="16" id="sxD-el-dRg"/>
+                            <constraint firstItem="gTT-Wg-8x3" firstAttribute="top" relation="greaterThanOrEqual" secondItem="kC5-H6-Fi0" secondAttribute="bottom" constant="8" id="xeR-r4-gm2"/>
                         </constraints>
                     </view>
                 </subviews>
@@ -80,7 +81,7 @@
                 <outlet property="scoreLabel" destination="gTT-Wg-8x3" id="hgN-N2-fZP"/>
                 <outlet property="titleLabel" destination="kC5-H6-Fi0" id="FMO-b7-YB6"/>
             </connections>
-            <point key="canvasLocation" x="-34" y="59"/>
+            <point key="canvasLocation" x="-34.345794392523359" y="58.639308855291581"/>
         </collectionViewCell>
     </objects>
     <resources>

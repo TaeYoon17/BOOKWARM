@@ -251,9 +251,40 @@
                     <view key="view" contentMode="scaleToFill" id="d4l-ug-T4w">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="eEa-je-eoz">
+                                <rect key="frame" x="0.0" y="59" width="393" height="759"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="SKi-BF-a8y">
+                                    <size key="itemSize" width="128" height="128"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="cSG-oE-hu8">
+                                        <rect key="frame" x="0.0" y="0.0" width="127.99999999999997" height="128"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="v4j-RQ-tkX">
+                                            <rect key="frame" x="0.0" y="0.0" width="127.99999999999997" height="128"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </collectionViewCellContentView>
+                                    </collectionViewCell>
+                                </cells>
+                            </collectionView>
+                        </subviews>
                         <viewLayoutGuide key="safeArea" id="QtX-wL-O10"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="QtX-wL-O10" firstAttribute="bottom" secondItem="eEa-je-eoz" secondAttribute="bottom" id="AnH-HD-t5T"/>
+                            <constraint firstItem="QtX-wL-O10" firstAttribute="trailing" secondItem="eEa-je-eoz" secondAttribute="trailing" id="IjT-LF-iZp"/>
+                            <constraint firstItem="eEa-je-eoz" firstAttribute="leading" secondItem="QtX-wL-O10" secondAttribute="leading" id="Sj4-zI-bk2"/>
+                            <constraint firstItem="eEa-je-eoz" firstAttribute="top" secondItem="QtX-wL-O10" secondAttribute="top" id="any-zi-KW1"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="collectionView" destination="eEa-je-eoz" id="hK8-Lo-uZJ"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ngr-pm-4kC" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -295,6 +326,7 @@
                     <connections>
                         <segue destination="FGv-an-llb" kind="relationship" relationship="viewControllers" id="fG4-Ze-pXB"/>
                         <segue destination="gIX-ll-vcw" kind="relationship" relationship="viewControllers" id="vzU-FA-MI0"/>
+                        <segue destination="f7f-qe-dpi" kind="relationship" relationship="viewControllers" id="YUv-L5-lo4"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fsJ-zx-tNo" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -353,6 +385,39 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="TA6-PF-1ms" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2780.9160305343512" y="355.63380281690144"/>
+        </scene>
+        <!--도서 검색-->
+        <scene sceneID="Kce-Pf-dEb">
+            <objects>
+                <navigationController id="f7f-qe-dpi" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="도서 검색" image="magnifyingglass" catalog="system" selectedImage="magnifyingglass" id="Mf9-f7-tCN"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" largeTitles="YES" id="Vwc-av-oyn">
+                        <rect key="frame" x="0.0" y="59" width="393" height="96"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="UCJ-GS-S7q" kind="relationship" relationship="rootViewController" id="qXf-6Q-PSc"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="UDv-Lb-gn2" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3304" y="-388"/>
+        </scene>
+        <!--검색-->
+        <scene sceneID="ywg-Fc-hvK">
+            <objects>
+                <viewController id="UCJ-GS-S7q" customClass="SearchMainVC" customModule="BOOKWARM" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="v81-wP-tRw">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="heW-8r-bit"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="검색" id="2T5-Li-shb"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="6tv-z7-nmV" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="4120" y="86"/>
         </scene>
         <!--둘러보기-->
         <scene sceneID="Wc8-lh-Sne">
