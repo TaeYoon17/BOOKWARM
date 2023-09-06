@@ -9,13 +9,16 @@ import Foundation
 import UIKit
 extension SearchingVC{
     func dataSourceUpdating(){
-        func dataSourceToSearching(){
+        func dataSourceToSearching(){ // 검색 중 일 때 가져올 데이터
             DispatchQueue.main.async {
-                let items:[Item] = self.tasks.map{.recent(item: $0, color: .random)}
+                let recentItems:[Item] = self.tasks.filter {
+                    guard let recent = $0.recent else {return false}
+                    return recent
+                }.map{.recent(item: $0, color: .random)}
                 var snapshot = NSDiffableDataSourceSnapshot<Section,Item>()
                 self.collectionView.collectionViewLayout = self.compositionalLayout
                 snapshot.appendSections([.searching])
-                snapshot.appendItems(items,toSection: .searching)
+                snapshot.appendItems(recentItems,toSection: .searching)
                 self.diffableDataSource.apply(snapshot,animatingDifferences: true)
             }
         }

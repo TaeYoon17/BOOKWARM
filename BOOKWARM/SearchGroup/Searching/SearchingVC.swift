@@ -22,13 +22,11 @@ final class SearchingVC: UIViewController{
     var requestedPage = 0
     var bookListColor:[UIColor] = []
     var bookmodel: [Book] = []
-    var realm: Realm!
-    let repository = TableRepository<BookTable>()
+    let repository = BookTableRepository()
     var tasks: Results<BookTable>!
     override func viewDidLoad() {
         super.viewDidLoad()
-        realm = try! Realm()
-        self.tasks = realm.objects(BookTable.self).sorted(byKeyPath: "title",ascending: false)
+        self.tasks = repository.fetch(key: "title")
         configureCollectionView()
         configureDataSource()
     }
@@ -44,10 +42,13 @@ final class SearchingVC: UIViewController{
                 config.attributedTitle = .init("지우기",attributes: .init([
                     NSAttributedString.Key.font : UIFont.preferredFont(forTextStyle: .subheadline)
                 ]))
-//                configuration = config
                 let button = UIButton(configuration: config,primaryAction: .init(handler: { [weak self] _ in
                     let alert = UIAlertController(title: nil, message: nil,preferredStyle: .actionSheet)
-                    alert.addAction(.init(title: "최근 검색 지우기", style: .default))
+                    alert.addAction(.init(title: "최근 검색 지우기", style: .default){[weak self] _ in
+                        self?.repository.remove(by: [\.recent]){
+                            self?.dataSourceUpdating()
+                        }
+                    })
                     alert.addAction(.init(title: "취소", style: .cancel))
                     self?.present(alert,animated: true)
                 }))
@@ -82,7 +83,6 @@ final class SearchingVC: UIViewController{
         dataSourceUpdating()
     }
 }
-
 extension SearchingVC{
     func searchQuery(){
         print(#function)

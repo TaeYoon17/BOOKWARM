@@ -34,7 +34,7 @@ extension SearchingVC:UICollectionViewDelegate,UIScrollViewDelegate,UICollection
                     vc.imageView.image = image
                 }
             }
-            repository.createItem(newTask)
+            repository.create(item: newTask)
         case .recent(item: let task, color: _):
             newTask = task
         }

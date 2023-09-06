@@ -37,7 +37,7 @@ struct Book: Codable,Hashable,Bookable{
     }
 }
 
-class BookTable:Object,Bookable{
+final class BookTable:Object,Bookable{
     var imageURL: String? { pathURL }
     @Persisted var title: String
     @Persisted var isbn : String
