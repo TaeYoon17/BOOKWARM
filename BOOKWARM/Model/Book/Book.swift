@@ -7,37 +7,62 @@
 
 import Foundation
 import RealmSwift
-struct Book: Codable,Hashable{
+protocol Bookable{
+    var title: String {get set}
+    var isbn : String {get set}
+    var price: Int {get set}
+    var imageURL: String? { get}
+    var contents: String {get set}
+}
+struct Book: Codable,Hashable,Bookable{
+    //MARK: -- Confirm Bookable Protocol
+    var imageURL: String? { get{thumbnailURL} }
+    var title: String
+    var isbn: String
+    var price: Int
+    var contents: String
+    
     let authors: [String]
-    let conetnts: String
     let datetime: Date
-    let isbn: String
-    let price: Int
     let publisher:String
-    let slae_price: Int
+    let salePrice: Int
     let status: String
-    let thumbnailURL: String
-    let title: String
+    let thumbnailURL: String?
     let translators: [String]
     let linkURL: String
-    var userLike: Bool?
+    enum CodingKeys: String, CodingKey {
+        case authors, contents, datetime, isbn, price, publisher
+        case salePrice = "sale_price"
+        case status,thumbnailURL = "thumbnail", title, translators, linkURL = "url"
+    }
 }
-class BookTable:Object{
-    @Persisted(primaryKey: true) var _id: ObjectId
+
+class BookTable:Object,Bookable{
+    var imageURL: String? { pathURL }
     @Persisted var title: String
     @Persisted var isbn : String
     @Persisted var price: Int
-    @Persisted var thumbnailURL: String
     @Persisted var contents: String
-    @Persisted var userLike: Bool?
+    
+    @Persisted(primaryKey: true) var _id: ObjectId
+    @Persisted var author:String?
+    @Persisted var publisher: String?
+    @Persisted var pathURL: String?
+    
+    // 앱에서 사용할 데이터
+    @Persisted var like: Bool? = false
+    @Persisted var memo: String? = ""
+    @Persisted var recent: Bool? = true
     convenience init(book: Book){
         self.init()
+        author = book.authors.first
+        publisher = book.publisher
         title = book.title
         isbn = book.isbn
         price = book.price
-        thumbnailURL = book.thumbnailURL
-        contents = book.conetnts
-        userLike = book.userLike
+        contents = book.contents
+        // 자체 기본 설정
+        like = false
     }
 }
 /*

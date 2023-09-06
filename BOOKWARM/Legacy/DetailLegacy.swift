@@ -1,21 +1,28 @@
 //
-//  DetailVC.swift
+//  DetailLegacy.swift
 //  BOOKWARM
 //
-//  Created by 김태윤 on 2023/07/31.
+//  Created by 김태윤 on 2023/09/05.
 //
 
 import UIKit
-import RealmSwift
-import SnapKit
-class DetailVC: UIViewController{
-    let realm = try! Realm()
+
+class LegacyDetailVC: UIViewController,MovieObserver{
     enum SegmentType:Int{ case Overview, Memo }
     enum SegueType:String{ case Push = "chevron.left",Modally = "xmark" }
     static let identifier = "DetailVC"
-    var itemSubscriber: ((BookTable)->())?
-    
-    var item:BookTable!
+    var movieSubscriber: ((Movie)->())?
+    var movie:Movie?{
+        didSet{
+            guard let movieSubscriber, let movie else {return}
+            movieSubscriber(movie)
+        }
+    }
+    var memo:String?{
+        didSet{
+            print(memo)
+        }
+    }
     var headerBg: UIColor?
     var segueType: SegueType = .Push
     var placeHolder = "메모를 입력하세요"
@@ -33,15 +40,11 @@ class DetailVC: UIViewController{
     @IBOutlet weak var memoTextView: UITextView!
     @IBOutlet weak var overviewLabel: UILabel!
     // 프로퍼티 바인딩 이용하기
-    var memo:String?{
-        didSet{
-            print(memo)
-        }
-    }
     private lazy var like: Bool = true{
         didSet{
             guard like != oldValue else {return}
             if let item = self.navigationItem.rightBarButtonItem{
+                self.movie?.like = like
                 item.setLike(like: like)
             }else {
                 print("이상하다")
@@ -69,31 +72,18 @@ class DetailVC: UIViewController{
         self.navigationItem.hidesBackButton = true
         self.navigationItem.leftBarButtonItem = .init(image: .init(systemName: segueType.rawValue)
                                                       , style: .plain, target: self, action: #selector(Self.popVC))
-        self.navigationItem.rightBarButtonItems = [
-            UIBarButtonItem(image: .init(systemName: "heart.fill"),style: .plain, target: self, action: #selector(Self.heartBtnTapped)),
-            UIBarButtonItem(title: "저장", style: .plain, target: self, action: #selector(Self.memoSaveTapped))
-        ]
-        guard let item else {return}
+        self.navigationItem.rightBarButtonItem = .init(image: .init(systemName: "heart.fill"),
+                                                       style: .plain, target: self, action: #selector(Self.heartBtnTapped))
+        guard let movie else {return}
         self.like.toggle()
-        self.like = item.like ?? false
-
+        self.like = movie.like
         configure()
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         guard let headerBg else { return }
-        DispatchQueue.main.async {
-            self.navigationItem.largeTitleDisplayMode = .never
-        }
         self.navigationController?.navigationBar.scrollEdgeAppearance?.backgroundColor = headerBg
         self.headerBgView.backgroundColor = headerBg
-    }
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        DispatchQueue.main.async {
-            self.navigationController?.navigationBar.prefersLargeTitles = false
-        }
-        
     }
     @IBAction func rootViewTapped(_ sender: UITapGestureRecognizer) {
         self.view.endEditing(true)
@@ -102,21 +92,6 @@ class DetailVC: UIViewController{
     @objc func heartBtnTapped(){
         self.like.toggle()
         self.view.endEditing(true)
-    }
-    @objc func memoSaveTapped(){
-        guard let data = self.item else {return}
-        print(realm.configuration.fileURL)
-//        let item = BookTable(value: ["_id" : data._id,"memo" : memoTextView.text.trimmingCharacters(in: .whitespaces)])
-//        guard let item = realm.object(ofType: BookTable.self, forPrimaryKey: data._id) else { return }
-        do {
-            try realm.write{
-                // 특정 레코드에 존재하는 값을 바꿀 때, 수정할 때
-                data.memo = memoTextView.text.trimmingCharacters(in: .whitespaces)
-            }
-            print(#function)
-        }catch{
-            print(error)
-        }
     }
     @objc func popVC(){
         switch segueType {
@@ -133,29 +108,26 @@ class DetailVC: UIViewController{
     }
 }
 //MARK: -- VC 초기 세팅
-extension DetailVC{
+extension LegacyDetailVC{
     func configure(){
-        guard let item else {return}
-        titleLabel.text = item.title
-        playTimeLabel.text = "저자: \(item.author ?? "")"
-        releaseDateLabel.text = "출판사: \(item.publisher ?? "")"
-        rateLabel.text = "isbn: \(item.isbn)"
-        imageView.image = .init(fileName: "\(item.isbn).jpg") ?? UIImage(systemName: "star.fill")
-        overviewLabel.text = item.contents
+        guard let movie else {return}
+        titleLabel.text = movie.title
+        playTimeLabel.text = "상영 시간: \(movie.runtime)분"
+        releaseDateLabel.text = "출시일: \(movie.releaseDate)"
+        rateLabel.text = "평점: \(String(format: "%.2f",movie.rate))"
+        imageView.image = .init(named: movie.title)
+        overviewLabel.text = movie.overview
         self.segmentType = .Overview
         self.memoTextView.delegate = self
         self.memoTextView.font = .systemFont(ofSize: 20, weight: .medium)
-        DispatchQueue.main.async {
-            self.memoTextView.text = item.memo; self.memo = item.memo
-            if let memo = self.memo, memo.trimmingPrefix([" ","\n"]) != ""{
-                self.memoTextView.set(valueType: .Exist(value: memo))
-            }else{
-                self.memoTextView.set(valueType: .Empty(placeholder: self.placeHolder))
-            }
+        if let memo, memo.trimmingPrefix([" ","\n"]) != ""{
+            self.memoTextView.set(valueType: .Exist(value: memo))
+        }else{
+            self.memoTextView.set(valueType: .Empty(placeholder: self.placeHolder))
         }
     }
 }
-extension DetailVC:UITextViewDelegate{
+extension LegacyDetailVC:UITextViewDelegate{
     func textViewDidEndEditing(_ textView: UITextView) {
         let trimmedText = textView.text.trimmingCharacters(in: [" ","\n"])
         self.memo = trimmedText
@@ -205,3 +177,4 @@ fileprivate extension UITextView{
         }
     }
 }
+

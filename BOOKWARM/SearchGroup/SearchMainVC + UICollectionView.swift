@@ -32,7 +32,7 @@ extension SearchMainVC: UICollectionViewDelegate, UICollectionViewDataSource,UIC
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HomeCollectionViewCell.identifier, for: indexPath) as? HomeCollectionViewCell else {return .init()}
             let book = bookmodel[indexPath.row]
             cell.bgColor = self.bookListColor[indexPath.row]
-            cell.searchVC_Configure(title: book.title, thumbnailURL: book.thumbnailURL, price: book.price)
+            cell.configureByBook(title: book.title, thumbnailURL: book.thumbnailURL, price: book.price)
             return cell
         }
     }
@@ -87,16 +87,27 @@ extension SearchMainVC: UICollectionViewDelegate, UICollectionViewDataSource,UIC
     }
 }
 class TempHeaderView: UICollectionReusableView{
-    var titleLabel = UILabel()
+    let titleLabel = UILabel()
+    var trailingBtn :UIButton?{
+        didSet{
+            guard let trailingBtn else {return}
+            self.addSubview(trailingBtn)
+            trailingBtn.snp.makeConstraints { make in
+                make.trailing.equalToSuperview()
+                make.verticalEdges.equalToSuperview()
+                make.leading.equalTo(titleLabel.snp.trailing)
+            }
+        }
+    }
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.addSubview(titleLabel)
-        
         titleLabel.font = .preferredFont(forTextStyle: .title2)
         titleLabel.text = "이걸 여기에서..!"
         titleLabel.font = .preferredFont(forTextStyle: .headline)
         titleLabel.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
+            make.verticalEdges.equalToSuperview()
+            make.leading.equalToSuperview()
         }
     }
     required init?(coder: NSCoder) {

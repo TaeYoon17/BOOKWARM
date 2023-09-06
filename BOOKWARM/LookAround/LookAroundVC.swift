@@ -53,12 +53,12 @@ class LookAroundVC: UIViewController{
     func presentNextView(index: Int){
         guard let _vc = storyboard?.instantiateViewController(withIdentifier: self.nextVC_Identifier) as? NextVC else { return }
         _vc.segueType = .Modally
-        _vc.movie = movieInfoModel.movie[safe: index]
+//        _vc.movie = movieInfoModel.movie[safe: index]
         _vc.headerBg = datasBgColor[safe: index]
-        _vc.movieSubscriber = {[weak self] movie in
-            guard let self else {return}
-            self.movieInfoModel.movie[index] = movie
-        }
+//        _vc.movieSubscriber = {[weak self] movie in
+//            guard let self else {return}
+//            self.movieInfoModel.movie[index] = movie
+//        }
         let vc = UINavigationController(rootViewController: _vc)
         vc.navigationController?.navigationBar.scrollEdgeAppearance = .init()
         vc.navigationBar.scrollEdgeAppearance = .init()

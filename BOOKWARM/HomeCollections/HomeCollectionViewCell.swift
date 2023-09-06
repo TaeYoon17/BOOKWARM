@@ -33,8 +33,6 @@ class HomeCollectionViewCell: UICollectionViewCell {
     }
     private func configure(){
         rootView.layer.cornerRadius = 16
-//        posterImgView.clipsToBounds = true
-//        titleLabel.clipsToBounds = true
         titleLabel.textColor = .white
         scoreLabel.textColor = .white
         titleLabel.font = .boldSystemFont(ofSize: 18)
@@ -62,3 +60,33 @@ fileprivate extension HomeCollectionViewCell{
         likeBtn.setPreferredSymbolConfiguration(.init(scale: .medium), forImageIn: .normal)
     }
 }
+extension HomeCollectionViewCell{
+    func configureByBook(title:String,thumbnailURL:String?,price:Int){
+        self.likeBtn.isHidden = true
+        self.titleLabel.text = title
+        self.titleLabel.font = .boldSystemFont(ofSize: 15)
+        self.titleLabel.numberOfLines = 2
+        self.titleLabel.adjustsFontSizeToFitWidth = false
+        self.scoreLabel.text = "\(price)원"
+        self.scoreLabel.font = .systemFont(ofSize: 12)
+        self.scoreLabel.numberOfLines = 0
+        self.scoreLabel.textAlignment = .left
+        self.posterImgView.kf.setImage(with: URL(string: thumbnailURL ?? ""))
+        self.posterImgView.contentMode = .scaleAspectFill
+    }
+    func configureByTable(title: String,thumbnailPath:String?,price:Int){
+        self.likeBtn.isHidden = true
+        self.titleLabel.text = title
+        self.titleLabel.font = .boldSystemFont(ofSize: 15)
+        self.titleLabel.numberOfLines = 2
+        self.titleLabel.adjustsFontSizeToFitWidth = false
+        self.scoreLabel.text = "\(price)원"
+        self.scoreLabel.font = .systemFont(ofSize: 12)
+        self.scoreLabel.numberOfLines = 0
+        self.scoreLabel.textAlignment = .left
+        self.posterImgView.image = .init(fileName: "\(thumbnailPath ?? "").jpg") ?? .init(systemName: "star.fill")
+        self.posterImgView.contentMode = .scaleAspectFill
+    }
+}
+
+

@@ -6,15 +6,37 @@
 //
 
 import UIKit
-
+import RealmSwift
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
-
-
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         UINavigationBar.appearance().tintColor = .black
+        
+        print(Realm.Configuration.defaultConfiguration.fileURL)
+        // 기본 oldSchema 숫자는 0에서 시작한다.
+        let config = Realm.Configuration(schemaVersion: 3){ migration, oldSchema in
+            if oldSchema < 1{            }
+            if oldSchema < 2{
+                migration.enumerateObjects(ofType: BookTable.className()) { oldObject, newObject in
+                    guard let new = newObject else {return}
+                    guard let old = oldObject else {return}
+                    new["recent"] = true
+                    
+                }
+            }
+            if oldSchema < 3{
+                migration.enumerateObjects(ofType: BookTable.className()) { oldObject, newObject in
+                    guard let new = newObject else {return}
+                    guard let old = oldObject else {return}
+                    new["recent"] = true
+                    new["like"] = false
+                }
+                
+            }
+        }
+        Realm.Configuration.defaultConfiguration = config
         return true
     }
 

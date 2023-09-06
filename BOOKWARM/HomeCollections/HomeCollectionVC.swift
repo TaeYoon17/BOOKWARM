@@ -128,13 +128,13 @@ extension HomeCollectionVC{
             return
         }
         guard let (info,color) = model.getMovieModel(idx: indexPath.row) else {return}
-        vc.movie = info
-        vc.headerBg = color
-        vc.movieSubscriber = {[weak self] movie in
-            self?.model.setList(index: indexPath.row, movie: movie)
-            self?.collectionView.reloadData()
-        }
-        self.navigationController?.pushViewController(vc, animated: true)
+//        vc.movie = info
+//        vc.headerBg = color
+//        vc.movieSubscriber = {[weak self] movie in
+//            self?.model.setList(index: indexPath.row, movie: movie)
+//            self?.collectionView.reloadData()
+//        }
+//        self.navigationController?.pushViewController(vc, animated: true)
     }
     fileprivate func setCollectionLayouts(){
         let layout = UICollectionViewFlowLayout()

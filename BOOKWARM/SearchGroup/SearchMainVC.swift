@@ -64,7 +64,7 @@ class SearchMainVC: UIViewController{
             switch item{
             case .result(book: let book):
                 cell.bgColor = self?.bookListColor[indexPath.row]
-                cell.searchVC_Configure(title: book.title, thumbnailURL: book.thumbnailURL, price: book.price)
+                cell.configureByBook(title: book.title, thumbnailURL: book.thumbnailURL, price: book.price)
             default: fatalError("이럴 수가 없음..!")
             }
         }
@@ -147,6 +147,7 @@ extension SearchMainVC:UISearchControllerDelegate,UISearchBarDelegate{
         searchController.searchBar.placeholder = "도서를 검색하세요"
         searchController.obscuresBackgroundDuringPresentation = false
         searchingVC.searchBar = searchController.searchBar
+        searchingVC.mainVC = self
         self.navigationItem.searchController = searchController
         self.navigationItem.hidesSearchBarWhenScrolling = false
     }
@@ -180,21 +181,7 @@ extension UIAlertController{
         self.addAction(.init(title: cancelMessage ?? "취소", style: .cancel))
     }
 }
-extension HomeCollectionViewCell{
-    func searchVC_Configure(title:String,thumbnailURL:String,price:Int){
-        self.likeBtn.isHidden = true
-        self.titleLabel.text = title
-        self.titleLabel.font = .boldSystemFont(ofSize: 15)
-        self.titleLabel.numberOfLines = 2
-        self.titleLabel.adjustsFontSizeToFitWidth = false
-        self.scoreLabel.text = "\(price)원"
-        self.scoreLabel.font = .systemFont(ofSize: 12)
-        self.scoreLabel.numberOfLines = 0
-        self.scoreLabel.textAlignment = .left
-        self.posterImgView.kf.setImage(with: URL(string: thumbnailURL))
-        self.posterImgView.contentMode = .scaleAspectFill
-    }
-}
+
 extension Book{
     static func getBookLists(jsonList: [JSON])->[Self]{
         return jsonList.map{ json in
@@ -208,7 +195,8 @@ extension Book{
             let price = json["price"].intValue; let sale_price = json["sale_price"].intValue
             let publisher = json["publisher"].stringValue
             let status = json["status"].stringValue
-            return Book(authors: authors, conetnts: contents, datetime: Date.now, isbn: isbn, price: price, publisher: publisher, slae_price: sale_price, status: status, thumbnailURL:  thumbnailURL, title: title, translators: translators, linkURL: linkURL)
+//            return Book(title: title, isbn: contents, price: Date.now, contents: isbn, authors: price, datetime: publisher, publisher: publisher, salePrice: sale_price, status:  thumbnailURL, thumbnailURL: title, translators: translators, linkURL: linkURL)
+            return Book(title: title, isbn: isbn, price: price, contents: contents, authors: authors, datetime: Date(), publisher: publisher, salePrice: sale_price, status: status, thumbnailURL: thumbnailURL, translators: translators, linkURL: linkURL)
         }
     }
 }
